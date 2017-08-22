@@ -34,5 +34,10 @@ async def on_message(message):
     if "sorry" in message.content.lower():
         return await my_bot.send_message(message.channel, content="You better be")
 
+    if "flip" in message.content.lower():
+        if random.randint(1,2) == 1:
+            return await my_bot.send_message(message.channel, content="Heads")
+        else:
+            return await my_bot.send_message(message.channel, content="Tails")
 
 my_bot.run(SecretKey.givekey())
