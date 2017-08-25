@@ -23,7 +23,7 @@ jokes = ["Would you like sum fries with that?", "Tickle my bum and call me Saman
          "Dwarfs and midgets have very little in common.", "How do you make Holy water? Boil the hell out of it.",
          "What's the hardest part about shooting up a school? The erection"]
 
-last_used = ""
+last_used = []
 
 
 @my_bot.event
@@ -54,11 +54,13 @@ async def on_message(message):
 			# Pick a random word
 			word = random.choice(jokes)
 			# Repick a word if it was the latest used word
-			if word == last_used:
+			if word in last_used:
 				pass
 			else:
 				# Reclassify the latest used and send the message
-				last_used = word
+				if len(last_used) > 5:
+					last_used.append(word)
+					last_used.pop(0)
 				return await my_bot.send_message(message.channel, content=word, tts=tts)
 
 	# Stupid sorry message
