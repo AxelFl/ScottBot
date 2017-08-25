@@ -41,9 +41,11 @@ async def on_message(message):
 
 	# Send scott promo on the command "scottpromo"
 	if "scottpromo" in message.content.lower():
-		return await my_bot.send_message(message.channel, content="https://www.behance.net/scottleiker, https://soundcloud.com/scottleiker, https://www.instagram.com/scottleiker pls follow")
+		return await my_bot.send_message(message.channel, content="https://www.behance.net/scottleiker, "
+		                                                          "https://soundcloud.com/scottleiker, "
+		                                                          "https://www.instagram.com/scottleiker pls follow")
 
-	# Activate the message sending if "scott is in the message
+	# Activate the message sending if "scott" is in the message
 	if "scott" in message.content.lower():
 		global jokes
 		global last_used
