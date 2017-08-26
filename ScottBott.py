@@ -1,11 +1,9 @@
-import discord
 from discord.ext.commands import Bot
 import random
 import SecretKey
 
 # Start the bot object
 my_bot = Bot(command_prefix="S")
-
 
 # All the things to say
 jokes = ["Would you like sum fries with that?", "Tickle my bum and call me Samantha.",
@@ -23,14 +21,18 @@ jokes = ["Would you like sum fries with that?", "Tickle my bum and call me Saman
          "Dwarfs and midgets have very little in common.", "How do you make Holy water? Boil the hell out of it.",
          "What's the hardest part about shooting up a school? The erection"]
 
+# List used to not repeat the same things again
+# Makes the choice function less random
 last_used = []
 
 
+# When the bot is ready
 @my_bot.event
 async def on_ready():
 	print("Client logged in")
 
 
+# For every message that the bot sees
 @my_bot.event
 async def on_message(message):
 	# 1 in 10 chance to activate the text to speech functionality on discord
@@ -59,8 +61,10 @@ async def on_message(message):
 			else:
 				# Reclassify the latest used and send the message
 				if len(last_used) > 5:
-					last_used.append(word)
 					last_used.pop(0)
+					last_used.append(word)
+				else:
+					last_used.append(word)
 				return await my_bot.send_message(message.channel, content=word, tts=tts)
 
 	# Stupid sorry message
