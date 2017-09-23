@@ -1,6 +1,9 @@
 from discord.ext.commands import Bot
 import random
 import SecretKey
+import asyncio
+import discord
+import time
 
 # Start the bot object
 my_bot = Bot(command_prefix="S")
@@ -29,23 +32,27 @@ last_used = []
 # When the bot is ready
 @my_bot.event
 async def on_ready():
+	# discord.opus.load_opus()
 	print("Client logged in")
 
 
 # For every message that the bot sees
 @my_bot.event
 async def on_message(message):
-	# 1 in 10 chance to activate the text to speech functionality on discord
+	# Add a 1 in 10 chance to activate the text to speech functionality on discord
+	# This is to not annoy the chat all too often with tts messages
+	# This feature is only used in the scott command and promo
 	if random.randint(1, 10) == 1:
 		tts = True
 	else:
 		tts = False
 
-	# Send scott promo on the command "scottpromo"
+	# Send Scott's promo on the command "scottpromo"
 	if "scottpromo" in message.content.lower():
 		return await my_bot.send_message(message.channel, content="https://www.behance.net/scottleiker, "
 		                                                          "https://soundcloud.com/scottleiker, "
-		                                                          "https://www.instagram.com/scottleiker pls follow")
+		                                                          "https://www.instagram.com/scottleiker pls follow",
+		                                 tts=tts)
 
 	# Activate the message sending if "scott" is in the message
 	if "scott" in message.content.lower():
@@ -56,10 +63,11 @@ async def on_message(message):
 			# Pick a random word
 			word = random.choice(jokes)
 			# Repick a word if it was the latest used word
-			if word in last_used:
-				pass
-			else:
+			# Else just pick another word
+			if word not in last_used:
 				# Reclassify the latest used and send the message
+				# If it is a short list just append the word
+				# Else remove the first one and add a new one
 				if len(last_used) > 5:
 					last_used.pop(0)
 					last_used.append(word)
@@ -73,11 +81,30 @@ async def on_message(message):
 
 	# Simple coin flip
 	if "flip" in message.content.lower():
+		# 50/50 random choice
 		if random.randint(1, 2) == 1:
 			return await my_bot.send_message(message.channel, content="Heads")
 		else:
 			return await my_bot.send_message(message.channel, content="Tails")
 
+	if "test" in message.content.lower():
+		in_voice = message.author.voice.voice_channel
+		if in_voice is not None:
+			VoiceClient = await my_bot.join_voice_channel(message.author.voice.voice_channel)
+			player = await VoiceClient.create_ytdl_player("https://www.youtube.com/watch?v=aRsWk4JZa5k")
+			player.start()
+			await asyncio.sleep(player.duration)
+			return await VoiceClient.disconnect()
 
-# External function to hide my discord bot's bot token
+		else:
+			print("nah fam")
+
+	# if "STOP" in message.content:
+	# 	try:
+	# 		await VoiceClient.disconnect()
+	# 	except UnboundLocalError:
+	# 		return await my_bot.send_message(message.channel, content="I'm not connected")
+
+
+# External function to hide my discord bot's token
 my_bot.run(SecretKey.givekey())
