@@ -12,7 +12,6 @@ delay = 0.5
 # When the bot is ready
 @my_bot.event
 async def on_ready():
-	# discord.opus.load_opus()
 	print("Client logged in")
 
 
@@ -20,7 +19,7 @@ async def on_ready():
 @my_bot.event
 async def on_message(message):
 
-	if message.content.lower().startswith("carey"):
+	if "carey" in message.content.lower():
 		in_voice = message.author.voice.voice_channel
 		if in_voice is not None:
 			voice_client = await my_bot.join_voice_channel(message.author.voice.voice_channel)
