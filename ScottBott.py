@@ -20,7 +20,7 @@ async def on_ready():
 async def on_message(message):
 
 	if "@everyone" in message.content.lower():
-		return await my_bot.send_file(message.channel, "D:\PycharmProjects\ScottBot\can_u_dont.jpg")
+		return await my_bot.send_file(message.channel, "can_u_dont.jpg")
 
 
 # External function to hide my discord bot's token
